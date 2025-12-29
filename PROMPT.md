@@ -23,12 +23,12 @@
 - ✅ docs/guide/websearch.md → docs/guide/websearch.zh.md
 - ✅ docs/examples/bug-fix.md → docs/examples/bug-fix.zh.md
 - ✅ docs/examples/cli-tool.md → docs/examples/cli-tool.zh.md
-- ✅ docs/examples/data-analysis.md → docs/examples/data-analysis.zh.md (本次完成)
+- ✅ docs/examples/data-analysis.md → docs/examples/data-analysis.zh.md
+- ✅ docs/examples/documentation.md → docs/examples/documentation.zh.md (本次完成)
 
 ### 待翻译的文件 (按优先级排序)
 
 #### 示例文档 (高优先级)
-- docs/examples/documentation.md → docs/examples/documentation.zh.md
 - docs/examples/index.md → docs/examples/index.zh.md
 - docs/examples/simple-task.md → docs/examples/simple-task.zh.md
 - docs/examples/testing.md → docs/examples/testing.zh.md
