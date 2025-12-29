@@ -47,6 +47,7 @@
 - ✅ docs/deployment/kubernetes.md → docs/deployment/kubernetes.zh.md
 - ✅ docs/deployment/production.md → docs/deployment/production.zh.md
 - ✅ docs/deployment/qchat-production.md → docs/deployment/qchat-production.zh.md
+- ✅ docs/changelog.md → docs/changelog.zh.md
 
 ### 待翻译的文件 (按优先级排序)
 
