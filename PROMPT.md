@@ -52,6 +52,7 @@
 - ✅ docs/faq.md → docs/faq.zh.md
 - ✅ docs/glossary.md → docs/glossary.zh.md
 - ✅ docs/license.md → docs/license.zh.md
+- ✅ docs/research.md → docs/research.zh.md
 
 ### 待翻译的文件 (按优先级排序)
 
@@ -73,7 +74,7 @@
 - ✅ docs/faq.md → docs/faq.zh.md
 - ✅ docs/glossary.md → docs/glossary.zh.md
 - ✅ docs/license.md → docs/license.zh.md
-- docs/research.md → docs/research.zh.md
+- ✅ docs/research.md → docs/research.zh.md
 - docs/testing.md → docs/testing.zh.md
 - docs/troubleshooting.md → docs/troubleshooting.zh.md
 
