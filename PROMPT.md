@@ -53,6 +53,7 @@
 - ✅ docs/glossary.md → docs/glossary.zh.md
 - ✅ docs/license.md → docs/license.zh.md
 - ✅ docs/research.md → docs/research.zh.md
+- ✅ examples/cli_tool.md → examples/cli_tool.zh.md
 
 ### 待翻译的文件 (按优先级排序)
 
@@ -79,7 +80,6 @@
 - ✅ docs/troubleshooting.md → docs/troubleshooting.zh.md
 
 #### 示例目录
-- examples/cli_tool.md → examples/cli_tool.zh.md
 - examples/simple_function.md → examples/simple_function.zh.md
 - examples/simple-task.md → examples/simple-task.zh.md
 - examples/web_scraper.md → examples/web_scraper.zh.md
