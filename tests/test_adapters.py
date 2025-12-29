@@ -4,9 +4,7 @@
 """Tests for Ralph Orchestrator adapters."""
 
 import unittest
-from unittest.mock import patch, MagicMock, AsyncMock
-import subprocess
-import asyncio
+from unittest.mock import patch, MagicMock
 import os
 
 from ralph_orchestrator.adapters.base import ToolAdapter, ToolResponse
@@ -117,10 +115,10 @@ class TestQChatAdapter(unittest.TestCase):
         """Test Q Chat availability check when available."""
         mock_run.return_value = MagicMock(returncode=0)
         
-        adapter = QChatAdapter()
-        # Note: availability check uses 'which q'
+        QChatAdapter()
+        expected_which = "where" if os.name == "nt" else "which"
         mock_run.assert_called_with(
-            ["which", "q"],
+            [expected_which, "q"],
             capture_output=True,
             timeout=5,
             text=True
@@ -143,14 +141,20 @@ class TestQChatAdapter(unittest.TestCase):
         # Mock stdout and stderr with fileno() support
         mock_stdout = MagicMock()
         mock_stdout.fileno.return_value = 3  # Valid file descriptor
-        # The _read_available method will be called multiple times
-        # Return data on first read, then empty strings
-        # Also need a value for the final read when process completes
-        mock_stdout.read.side_effect = ["Q Chat response", "", "", "", ""]
+        if os.name == "nt":
+            mock_stdout.readline.side_effect = ["Q Chat response", ""]
+        else:
+            # The _read_available method will be called multiple times
+            # Return data on first read, then empty strings
+            # Also need a value for the final read when process completes
+            mock_stdout.read.side_effect = ["Q Chat response", "", "", "", ""]
         
         mock_stderr = MagicMock()
         mock_stderr.fileno.return_value = 4  # Valid file descriptor
-        mock_stderr.read.side_effect = ["", "", "", "", ""]
+        if os.name == "nt":
+            mock_stderr.readline.side_effect = ["", ""]
+        else:
+            mock_stderr.read.side_effect = ["", "", "", "", ""]
         
         mock_process.stdout = mock_stdout
         mock_process.stderr = mock_stderr

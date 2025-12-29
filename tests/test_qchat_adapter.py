@@ -9,9 +9,9 @@ import threading
 import time
 import signal
 import subprocess
-from unittest.mock import Mock, patch, MagicMock, call, AsyncMock
+import os
+from unittest.mock import Mock, patch, AsyncMock
 from src.ralph_orchestrator.adapters.qchat import QChatAdapter
-from src.ralph_orchestrator.adapters.base import ToolResponse
 
 
 class TestQChatAdapterInit:
@@ -30,7 +30,7 @@ class TestQChatAdapterInit:
     def test_signal_handlers_registered(self):
         """Test signal handlers are properly registered."""
         with patch('signal.signal') as mock_signal:
-            adapter = QChatAdapter()
+            QChatAdapter()
             # Should register SIGINT and SIGTERM handlers
             assert mock_signal.call_count >= 2
             calls = mock_signal.call_args_list
@@ -48,8 +48,9 @@ class TestAvailabilityCheck:
         with patch('subprocess.run') as mock_run:
             mock_run.return_value = Mock(returncode=0)
             assert adapter.check_availability() is True
+            expected_which = "where" if os.name == "nt" else "which"
             mock_run.assert_called_once_with(
-                ["which", "q"],
+                [expected_which, "q"],
                 capture_output=True,
                 timeout=5,
                 text=True
@@ -66,7 +67,8 @@ class TestAvailabilityCheck:
         """Test availability check timeout handling."""
         adapter = QChatAdapter()
         with patch('subprocess.run') as mock_run:
-            mock_run.side_effect = subprocess.TimeoutExpired("which q", 5)
+            expected_which = "where" if os.name == "nt" else "which"
+            mock_run.side_effect = subprocess.TimeoutExpired(f"{expected_which} q", 5)
             assert adapter.check_availability() is False
     
     def test_check_availability_file_not_found(self):
@@ -145,24 +147,32 @@ class TestSyncExecution:
         adapter = QChatAdapter()
         adapter.available = True
 
-        # Mock Popen to create a process, then raise exception during pipe setup
-        mock_process = Mock()
-        mock_process.stdout = Mock()
-        mock_process.stderr = Mock()
-        mock_process.poll.return_value = None
+        if os.name != "nt":
+            # Mock Popen to create a process, then raise exception during pipe setup
+            mock_process = Mock()
+            mock_process.stdout = Mock()
+            mock_process.stderr = Mock()
+            mock_process.poll.return_value = None
 
-        with patch('subprocess.Popen') as mock_popen:
-            # First call succeeds (creates process), but make_non_blocking fails
-            mock_popen.return_value = mock_process
+            with patch('subprocess.Popen') as mock_popen:
+                # First call succeeds (creates process), but make_non_blocking fails
+                mock_popen.return_value = mock_process
 
-            with patch.object(adapter, '_make_non_blocking') as mock_non_blocking:
-                mock_non_blocking.side_effect = Exception("Pipe setup failed")
+                with patch.object(adapter, '_make_non_blocking') as mock_non_blocking:
+                    mock_non_blocking.side_effect = Exception("Pipe setup failed")
 
+                    response = adapter.execute("test prompt", verbose=False)
+
+                    assert response.success is False
+                    assert "Pipe setup failed" in response.error
+                    # This assertion catches the bug - process must be cleaned up
+                    assert adapter.current_process is None
+        else:
+            with patch('subprocess.Popen') as mock_popen:
+                mock_popen.side_effect = Exception("Popen failed")
                 response = adapter.execute("test prompt", verbose=False)
-
                 assert response.success is False
-                assert "Pipe setup failed" in response.error
-                # This assertion catches the bug - process must be cleaned up
+                assert "Popen failed" in response.error
                 assert adapter.current_process is None
 
 
@@ -291,11 +301,14 @@ class TestConcurrencyAndThreadSafety:
         with patch('subprocess.Popen') as mock_popen:
             mock_process = Mock()
             # Process keeps running until shutdown
-            mock_process.poll.return_value = None
+            mock_process.poll.side_effect = lambda: (None if not adapter.shutdown_requested else 1)
             mock_process.stdout = Mock()
             mock_process.stderr = Mock()
             mock_process.stdout.fileno.return_value = 1
             mock_process.stderr.fileno.return_value = 2
+            mock_process.stdout.readline.return_value = ""
+            mock_process.stderr.readline.return_value = ""
+            mock_process.wait = Mock()
             mock_popen.return_value = mock_process
             
             # Set shutdown after a small delay
@@ -327,10 +340,15 @@ class TestResourceManagement:
         # Test with valid pipe
         mock_pipe = Mock()
         mock_pipe.fileno.return_value = 5
-        
-        with patch('fcntl.fcntl') as mock_fcntl:
-            adapter._make_non_blocking(mock_pipe)
-            assert mock_fcntl.call_count == 2  # Get flags, then set flags
+
+        if os.name == "nt":
+            with patch('os.set_blocking') as mock_set_blocking:
+                adapter._make_non_blocking(mock_pipe)
+                mock_set_blocking.assert_called_once_with(5, False)
+        else:
+            with patch('fcntl.fcntl') as mock_fcntl:
+                adapter._make_non_blocking(mock_pipe)
+                assert mock_fcntl.call_count == 2  # Get flags, then set flags
     
     def test_pipe_non_blocking_invalid_fd(self):
         """Test non-blocking setup with invalid file descriptor."""
@@ -423,6 +441,8 @@ class TestPromptEnhancement:
             mock_process.stderr.read.return_value = ""
             mock_process.stdout.fileno.return_value = 1
             mock_process.stderr.fileno.return_value = 2
+            mock_process.stdout.readline.return_value = ""
+            mock_process.stderr.readline.return_value = ""
             mock_popen.return_value = mock_process
             
             adapter.execute("Test task", prompt_file="custom.md", verbose=False)

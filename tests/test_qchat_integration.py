@@ -9,13 +9,9 @@ depend on q CLI are marked to skip when it's not installed.
 
 import pytest
 import asyncio
-import threading
-import time
 import signal
 import os
-import tempfile
 import shutil
-from pathlib import Path
 from unittest.mock import patch, Mock
 from src.ralph_orchestrator.adapters.qchat import QChatAdapter
 
@@ -198,10 +194,13 @@ class TestQChatIntegration:
         mock_pipe = Mock()
         mock_pipe.fileno.return_value = 5
         
-        with patch('fcntl.fcntl') as mock_fcntl:
+        if os.name == "nt":
             adapter._make_non_blocking(mock_pipe)
-            # Should call fcntl twice (get flags, set flags)
-            assert mock_fcntl.call_count == 2
+        else:
+            with patch('fcntl.fcntl') as mock_fcntl:
+                adapter._make_non_blocking(mock_pipe)
+                # Should call fcntl twice (get flags, set flags)
+                assert mock_fcntl.call_count == 2
         
         # Test with invalid pipe
         invalid_pipe = Mock()

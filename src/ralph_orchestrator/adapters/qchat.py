@@ -10,7 +10,6 @@ import signal
 import threading
 import asyncio
 import time
-import fcntl
 from .base import ToolAdapter, ToolResponse
 from ..logging_config import RalphLogger
 
@@ -84,8 +83,9 @@ class QChatAdapter(ToolAdapter):
         """Check if q CLI is available."""
         try:
             # Try to check if q command exists
+            which_cmd = "where" if os.name == "nt" else "which"
             result = subprocess.run(
-                ["which", self.command],
+                [which_cmd, self.command],
                 capture_output=True,
                 timeout=5,
                 text=True
@@ -148,6 +148,8 @@ class QChatAdapter(ToolAdapter):
                 logger.info(f"Working directory: {os.getcwd()}")
                 logger.info(f"Timeout: {timeout} seconds")
                 print("-" * 60, file=sys.stderr)
+
+            start_time = time.time()
             
             # Use Popen for real-time output streaming
             process = subprocess.Popen(
@@ -163,6 +165,112 @@ class QChatAdapter(ToolAdapter):
             # Set process reference with lock
             with self._lock:
                 self.current_process = process
+
+            if os.name == "nt":
+                try:
+                    stdout_lines = []
+                    stderr_lines = []
+
+                    def _drain_pipe(pipe, sink):
+                        if not pipe:
+                            return
+                        try:
+                            while True:
+                                chunk = pipe.readline()
+                                if not chunk or not isinstance(chunk, str):
+                                    break
+                                sink.append(chunk)
+                                if verbose:
+                                    print(chunk, end="", file=sys.stderr)
+                        except Exception:
+                            return
+
+                    stdout_thread = threading.Thread(
+                        target=_drain_pipe, args=(process.stdout, stdout_lines), daemon=True
+                    )
+                    stderr_thread = threading.Thread(
+                        target=_drain_pipe, args=(process.stderr, stderr_lines), daemon=True
+                    )
+                    stdout_thread.start()
+                    stderr_thread.start()
+
+                    timed_out = False
+                    shutdown = False
+                    while True:
+                        with self._lock:
+                            shutdown = self.shutdown_requested
+
+                        if shutdown:
+                            logger.warning("Shutdown requested, terminating q chat process (Windows)")
+                            process.terminate()
+                            try:
+                                process.wait(timeout=3)
+                            except subprocess.TimeoutExpired:
+                                process.kill()
+                                process.wait(timeout=2)
+                            break
+
+                        if process.poll() is not None:
+                            break
+
+                        if (time.time() - start_time) > timeout:
+                            timed_out = True
+                            logger.warning("Command timed out on Windows, terminating process")
+                            process.terminate()
+                            try:
+                                process.wait(timeout=3)
+                            except subprocess.TimeoutExpired:
+                                process.kill()
+                                process.wait(timeout=2)
+                            break
+
+                        time.sleep(0.05)
+
+                    stdout_thread.join(timeout=1)
+                    stderr_thread.join(timeout=1)
+
+                    returncode = process.poll()
+                    full_stdout = "".join(stdout_lines)
+                    full_stderr = "".join(stderr_lines)
+
+                    if timed_out:
+                        return ToolResponse(
+                            success=False,
+                            output=full_stdout,
+                            error=f"q chat command timed out after {timeout:.2f} seconds"
+                        )
+                    if shutdown:
+                        return ToolResponse(
+                            success=False,
+                            output=full_stdout,
+                            error="Process terminated due to shutdown signal"
+                        )
+                finally:
+                    with self._lock:
+                        self.current_process = None
+
+                execution_time = time.time() - start_time
+                if verbose:
+                    print("-" * 60, file=sys.stderr)
+                    print(f"Process completed with return code: {returncode}", file=sys.stderr)
+                    print(f"Total execution time: {execution_time:.2f} seconds", file=sys.stderr)
+
+                if returncode == 0:
+                    return ToolResponse(
+                        success=True,
+                        output=full_stdout,
+                        metadata={
+                            "tool": "q chat",
+                            "execution_time": execution_time,
+                            "verbose": verbose,
+                            "return_code": returncode
+                        }
+                    )
+                return ToolResponse(
+                    success=False,
+                    output=full_stdout,
+                    error=full_stderr.strip() or f"q chat command failed with code {returncode}"
+                )
             
             # Make pipes non-blocking to prevent deadlock
             self._make_non_blocking(process.stdout)
@@ -171,8 +279,6 @@ class QChatAdapter(ToolAdapter):
             # Collect output while streaming
             stdout_lines = []
             stderr_lines = []
-            
-            start_time = time.time()
             last_output_time = start_time
             
             while True:
@@ -363,6 +469,11 @@ class QChatAdapter(ToolAdapter):
                 fd = pipe.fileno()
                 # Check if fd is a valid integer file descriptor
                 if isinstance(fd, int) and fd >= 0:
+                    if os.name == "nt":
+                        if hasattr(os, "set_blocking"):
+                            os.set_blocking(fd, False)
+                        return
+                    import fcntl  # type: ignore
                     flags = fcntl.fcntl(fd, fcntl.F_GETFL)
                     fcntl.fcntl(fd, fcntl.F_SETFL, flags | os.O_NONBLOCK)
             except (AttributeError, ValueError, OSError):
