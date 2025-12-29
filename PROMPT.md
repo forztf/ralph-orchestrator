@@ -38,6 +38,7 @@
 - ✅ docs/06-analysis/comparison-matrix.md → docs/06-analysis/comparison-matrix.zh.md
 - ✅ docs/advanced/architecture.md → docs/advanced/architecture.zh.md
 - ✅ docs/advanced/context-management.md → docs/advanced/context-management.zh.md
+- ✅ docs/advanced/loop-detection.md → docs/advanced/loop-detection.zh.md
 
 ### 待翻译的文件 (按优先级排序)
 
@@ -48,7 +49,6 @@
 (所有 API 文档已完成)
 
 #### 高级主题 (中等优先级)
-- docs/advanced/loop-detection.md → docs/advanced/loop-detection.zh.md
 - docs/advanced/monitoring.md → docs/advanced/monitoring.zh.md
 - docs/advanced/production-deployment.md → docs/advanced/production-deployment.zh.md
 - docs/advanced/security.md → docs/advanced/security.zh.md
