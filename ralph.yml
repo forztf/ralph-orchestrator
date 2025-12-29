@@ -2,7 +2,7 @@
 # This file configures Ralph and its AI agent adapters
 
 # Core orchestrator settings
-agent: auto                    # Which agent to use: claude, q, gemini, auto
+agent: claude                    # Which agent to use: claude, q, gemini, auto
 prompt_file: PROMPT.md         # Path to prompt file
 max_iterations: 100            # Maximum iterations before stopping
 max_runtime: 14400             # Maximum runtime in seconds (4 hours)
