@@ -63,7 +63,7 @@
 (所有部署文档已完成)
 
 #### 其他文档 (低优先级)
-- docs/changelog.md → docs/changelog.zh.md
+- ✅ docs/changelog.md → docs/changelog.zh.md
 - docs/contributing.md → docs/contributing.zh.md
 - docs/faq.md → docs/faq.zh.md
 - docs/glossary.md → docs/glossary.zh.md
