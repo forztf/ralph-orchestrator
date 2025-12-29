@@ -15,12 +15,12 @@
 - ✅ docs/guide/agents.md → docs/guide/agents.zh.md
 - ✅ docs/guide/checkpointing.md → docs/guide/checkpointing.zh.md
 - ✅ docs/guide/configuration.md → docs/guide/configuration.zh.md
-- ✅ docs/guide/cost-management.md → docs/guide/cost-management.zh.md (本次完成)
+- ✅ docs/guide/cost-management.md → docs/guide/cost-management.zh.md
+- ✅ docs/guide/prompts.md → docs/guide/prompts.zh.md (本次完成)
 
 ### 待翻译的文件 (按优先级排序)
 
 #### 用户指南 (高优先级)
-- docs/guide/prompts.md → docs/guide/prompts.zh.md
 - docs/guide/web-monitoring-complete.md → docs/guide/web-monitoring-complete.zh.md
 - docs/guide/web-monitoring.md → docs/guide/web-monitoring.zh.md
 - docs/guide/web-quickstart.md → docs/guide/web-quickstart.zh.md
