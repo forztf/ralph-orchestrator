@@ -76,7 +76,7 @@
 - ✅ docs/license.md → docs/license.zh.md
 - ✅ docs/research.md → docs/research.zh.md
 - ✅ docs/testing.md → docs/testing.zh.md
-- docs/troubleshooting.md → docs/troubleshooting.zh.md
+- ✅ docs/troubleshooting.md → docs/troubleshooting.zh.md
 
 #### 示例目录
 - examples/cli_tool.md → examples/cli_tool.zh.md
