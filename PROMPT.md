@@ -19,12 +19,10 @@
 - ✅ docs/guide/prompts.md → docs/guide/prompts.zh.md
 - ✅ docs/guide/web-monitoring-complete.md → docs/guide/web-monitoring-complete.zh.md
 - ✅ docs/guide/web-monitoring.md → docs/guide/web-monitoring.zh.md
-- ✅ docs/guide/web-quickstart.md → docs/guide/web-quickstart.zh.md (本次完成)
+- ✅ docs/guide/web-quickstart.md → docs/guide/web-quickstart.zh.md
+- ✅ docs/guide/websearch.md → docs/guide/websearch.zh.md (本次完成)
 
 ### 待翻译的文件 (按优先级排序)
-
-#### 用户指南 (高优先级)
-- docs/guide/websearch.md → docs/guide/websearch.zh.md
 
 #### 示例文档 (高优先级)
 - docs/examples/bug-fix.md → docs/examples/bug-fix.zh.md
