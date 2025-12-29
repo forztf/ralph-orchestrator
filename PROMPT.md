@@ -27,12 +27,13 @@
 - ✅ docs/examples/documentation.md → docs/examples/documentation.zh.md
 - ✅ docs/examples/index.md → docs/examples/index.zh.md
 - ✅ docs/examples/simple-task.md → docs/examples/simple-task.zh.md
-- ✅ docs/examples/testing.md → docs/examples/testing.zh.md (本次完成)
+- ✅ docs/examples/testing.md → docs/examples/testing.zh.md
+- ✅ docs/examples/web-api.md → docs/examples/web-api.zh.md (本次完成)
 
 ### 待翻译的文件 (按优先级排序)
 
 #### 示例文档 (高优先级)
-- docs/examples/web-api.md → docs/examples/web-api.zh.md
+(所有示例文档已完成)
 
 #### API 文档 (中等优先级)
 - docs/api/agents.md → docs/api/agents.zh.md
