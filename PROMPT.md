@@ -49,6 +49,7 @@
 - ✅ docs/deployment/qchat-production.md → docs/deployment/qchat-production.zh.md
 - ✅ docs/changelog.md → docs/changelog.zh.md
 - ✅ docs/contributing.md → docs/contributing.zh.md
+- ✅ docs/faq.md → docs/faq.zh.md
 
 ### 待翻译的文件 (按优先级排序)
 
@@ -67,7 +68,7 @@
 #### 其他文档 (低优先级)
 - ✅ docs/changelog.md → docs/changelog.zh.md
 - ✅ docs/contributing.md → docs/contributing.zh.md
-- docs/faq.md → docs/faq.zh.md
+- ✅ docs/faq.md → docs/faq.zh.md
 - docs/glossary.md → docs/glossary.zh.md
 - docs/license.md → docs/license.zh.md
 - docs/research.md → docs/research.zh.md
