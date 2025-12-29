@@ -43,6 +43,7 @@
 - ✅ docs/advanced/production-deployment.md → docs/advanced/production-deployment.zh.md
 - ✅ docs/advanced/security.md → docs/advanced/security.zh.md
 - ✅ docs/deployment/ci-cd.md → docs/deployment/ci-cd.zh.md
+- ✅ docs/deployment/docker.md → docs/deployment/docker.zh.md
 
 ### 待翻译的文件 (按优先级排序)
 
@@ -56,7 +57,6 @@
 (所有高级主题文档已完成)
 
 #### 部署文档 (中等优先级)
-- docs/deployment/docker.md → docs/deployment/docker.zh.md
 - docs/deployment/kubernetes.md → docs/deployment/kubernetes.zh.md
 - docs/deployment/production.md → docs/deployment/production.zh.md
 - docs/deployment/qchat-production.md → docs/deployment/qchat-production.zh.md
