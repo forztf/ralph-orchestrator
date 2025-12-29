@@ -4,14 +4,13 @@
 """Tests for Ralph Orchestrator."""
 
 import unittest
-from unittest.mock import patch, MagicMock, mock_open
+from unittest.mock import patch, MagicMock
 from pathlib import Path
 import tempfile
-import json
 
 from ralph_orchestrator.orchestrator import RalphOrchestrator
 from ralph_orchestrator.metrics import Metrics, CostTracker
-from ralph_orchestrator.safety import SafetyGuard, SafetyCheckResult
+from ralph_orchestrator.safety import SafetyGuard
 from ralph_orchestrator.context import ContextManager
 
 
@@ -259,6 +258,49 @@ class TestRalphOrchestrator(unittest.TestCase):
             self.assertEqual(orchestrator.primary_tool, "claude")
             self.assertIsNotNone(orchestrator.metrics)
             self.assertIsNotNone(orchestrator.safety_guard)
+        finally:
+            Path(prompt_file).unlink()
+
+    def test_orchestrator_auto_selects_available_adapter(self):
+        """Test agent=auto selects an available adapter."""
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+            f.write("# Test")
+            prompt_file = f.name
+
+        try:
+            from ralph_orchestrator.main import RalphConfig, AgentType
+
+            config = RalphConfig(agent=AgentType.AUTO, prompt_file=prompt_file, max_iterations=10)
+
+            with patch.object(RalphOrchestrator, '_initialize_adapters') as mock_init:
+                mock_init.return_value = {
+                    'qchat': MagicMock(),
+                    'acp': MagicMock(),
+                }
+                orchestrator = RalphOrchestrator(prompt_file_or_config=config)
+                self.assertIn(orchestrator.primary_tool, ('qchat', 'acp'))
+                self.assertIsNotNone(orchestrator.current_adapter)
+        finally:
+            Path(prompt_file).unlink()
+
+    def test_orchestrator_q_alias_maps_to_qchat(self):
+        """Test agent=q maps to qchat adapter key."""
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.md', delete=False) as f:
+            f.write("# Test")
+            prompt_file = f.name
+
+        try:
+            from ralph_orchestrator.main import RalphConfig, AgentType
+
+            config = RalphConfig(agent=AgentType.Q, prompt_file=prompt_file, max_iterations=10)
+
+            with patch.object(RalphOrchestrator, '_initialize_adapters') as mock_init:
+                mock_init.return_value = {
+                    'qchat': MagicMock(),
+                }
+                orchestrator = RalphOrchestrator(prompt_file_or_config=config)
+                self.assertEqual(orchestrator.primary_tool, 'qchat')
+                self.assertIsNotNone(orchestrator.current_adapter)
         finally:
             Path(prompt_file).unlink()
     

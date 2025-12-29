@@ -32,6 +32,20 @@ logger = logging.getLogger('ralph-orchestrator')
 
 class RalphOrchestrator:
     """Main orchestration loop for AI agents."""
+
+    def _normalize_primary_tool(self, tool: str) -> str:
+        """Normalize tool names and aliases."""
+        normalized = (tool or "").strip().lower()
+        if normalized == "q":
+            return "qchat"
+        return normalized
+
+    def _select_auto_primary_tool(self) -> str:
+        """Select a primary tool automatically from initialized adapters."""
+        for candidate in ("claude", "qchat", "gemini", "acp"):
+            if candidate in self.adapters:
+                return candidate
+        raise ValueError("No available tools for agent 'auto'")
     
     def __init__(
         self,
@@ -101,6 +115,11 @@ class RalphOrchestrator:
         
         # Initialize adapters
         self.adapters = self._initialize_adapters()
+
+        self.primary_tool = self._normalize_primary_tool(self.primary_tool)
+        if self.primary_tool == "auto":
+            self.primary_tool = self._select_auto_primary_tool()
+
         self.current_adapter = self.adapters.get(self.primary_tool)
         
         if not self.current_adapter:
@@ -126,7 +145,7 @@ class RalphOrchestrator:
         self.archive_dir.mkdir(parents=True, exist_ok=True)
         Path(".agent").mkdir(exist_ok=True)
         
-        logger.info(f"Ralph Orchestrator initialized with {primary_tool}")
+        logger.info(f"Ralph Orchestrator initialized with {self.primary_tool}")
     
     def _initialize_adapters(self) -> Dict[str, ToolAdapter]:
         """Initialize available adapters."""
