@@ -29,7 +29,7 @@
 - ✅ docs/examples/simple-task.md → docs/examples/simple-task.zh.md
 - ✅ docs/examples/testing.md → docs/examples/testing.zh.md
 - ✅ docs/examples/web-api.md → docs/examples/web-api.zh.md
- ✅ docs/api/agents.md → docs/api/agents.zh.md (本次完成)
+- ✅ docs/api/agents.md → docs/api/agents.zh.md
 
 ### 待翻译的文件 (按优先级排序)
 
