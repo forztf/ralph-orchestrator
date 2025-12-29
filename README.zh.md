@@ -15,6 +15,8 @@ Ralph Wiggum 软件工程技术的一个还算实用的实现——将 AI 代理
 
 **[查看完整文档](https://mikeyobrien.github.io/ralph-orchestrator/)** | [快速开始](https://mikeyobrien.github.io/ralph-orchestrator/quick-start/) | [API 参考](https://mikeyobrien.github.io/ralph-orchestrator/api/) | [示例](https://mikeyobrien.github.io/ralph-orchestrator/examples/)
 
+**[English Documentation](README.md)** | [中文文档](README.zh.md)
+
 ## 概述
 
 Ralph Orchestrator 实现了一个简单而有效的模式，使用 AI 代理完成自主任务。它会持续运行 AI 代理对抗提示文件，直到任务被标记为完成或达到限制。

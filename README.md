@@ -15,6 +15,8 @@ A somewhat functional implementation of the Ralph Wiggum software engineering te
 
 **[View Full Documentation](https://mikeyobrien.github.io/ralph-orchestrator/)** | [Quick Start](https://mikeyobrien.github.io/ralph-orchestrator/quick-start/) | [API Reference](https://mikeyobrien.github.io/ralph-orchestrator/api/) | [Examples](https://mikeyobrien.github.io/ralph-orchestrator/examples/)
 
+**[🇨🇳 中文文档](README.zh.md)** | [English](README.md)
+
 ## Overview
 
 Ralph Orchestrator implements a simple but effective pattern for autonomous task completion using AI agents. It continuously runs an AI agent against a prompt file until the task is marked as complete or limits are reached.
