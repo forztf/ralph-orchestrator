@@ -30,6 +30,7 @@
 - ✅ docs/examples/testing.md → docs/examples/testing.zh.md
 - ✅ docs/examples/web-api.md → docs/examples/web-api.zh.md
 - ✅ docs/api/agents.md → docs/api/agents.zh.md
+- ✅ docs/api/cli.md → docs/api/cli.zh.md
 
 ### 待翻译的文件 (按优先级排序)
 
@@ -37,7 +38,6 @@
 (所有示例文档已完成)
 
 #### API 文档 (中等优先级)
-- docs/api/cli.md → docs/api/cli.zh.md
 - docs/api/config.md → docs/api/config.zh.md
 - docs/api/metrics.md → docs/api/metrics.zh.md
 - docs/api/orchestrator.md → docs/api/orchestrator.zh.md
