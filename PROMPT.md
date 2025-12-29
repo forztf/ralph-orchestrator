@@ -55,6 +55,7 @@
 - ✅ docs/research.md → docs/research.zh.md
 - ✅ examples/cli_tool.md → examples/cli_tool.zh.md
 - ✅ examples/simple_function.md → examples/simple_function.zh.md
+- ✅ prompts/WEB_PROMPT.md → prompts/WEB_PROMPT.zh.md
 
 ### 待翻译的文件 (按优先级排序)
 
@@ -86,7 +87,7 @@
 - examples/web-api.md → examples/web-api.zh.md
 
 #### 提示词目录
-- prompts/WEB_PROMPT.md → prompts/WEB_PROMPT.zh.md
+(所有提示词目录文件已完成)
 
 ## 工作说明
 每次迭代翻译一个文件,遵循以下步骤:
