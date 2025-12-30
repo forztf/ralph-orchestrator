@@ -41,8 +41,8 @@
 - [x] 项目仓库中可以找到所有翻译文件
 
 
-<!-- TASK_COMPLETE -->
-
+<!-- Add TASK_COMPLETE here when done -->
+[x] TASK_COMPLETE
 ---
 
 ## 📋 项目完成验证记录
