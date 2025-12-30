@@ -317,6 +317,9 @@ The file content should follow this EXACT format:
 - [Measurable success criterion 2]
 - [How to know when task is complete]
 
+<!-- Add TASK_COMPLETE here when done -->
+[ ] TASK_COMPLETE
+
 IMPORTANT: 
 1. WRITE the content to {output_file} using your file writing tools
 2. Make requirements specific and actionable with checkboxes
